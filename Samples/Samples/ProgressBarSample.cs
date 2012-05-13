@@ -88,15 +88,15 @@ namespace Samples
 			pgBarZ.Indeterminate = true;
 
 
-			var fA = new Frame ();
+			var fA = new Frame (FrameType.Custom);
 			fA.Content = new Label (" Artist");
 			table.Attach (fA, 0, 0);
 
-			var fT = new Frame ();
+			var fT = new Frame (FrameType.Custom);
 			fT.Content = new Label (" Title");
 			table.Attach (fT, 1, 0);
 
-			var fS = new Frame ();
+			var fS = new Frame (FrameType.Custom);
 			fS.Content = new Label (" Status");
 			table.Attach (fS, 2, 0);
 //
