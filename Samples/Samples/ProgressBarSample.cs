@@ -38,10 +38,6 @@ namespace Samples
 		ProgressBar determinateProgressBar;
 		ProgressBar indeterminateProgressBar;
 
-		DataField<string> artist = new DataField<string> ();
-		DataField<string> title = new DataField<string> ();
-		DataField<string> status = new DataField<string> ();
-
 		public ProgressBarSample ()
 		{
 			indeterminateProgressBar = new ProgressBar();
