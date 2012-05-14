@@ -66,18 +66,18 @@ namespace Samples
 //			}
 
 			var table = new Table ();
-			var artistX = new Label ("Artist X");
+			var artistX = new Label (" Artist X");
 			artistX.BackgroundColor = Xwt.Drawing.Colors.White;
-			var artistY = new Label ("Artist Y");
+			var artistY = new Label (" Artist Y");
 			artistY.BackgroundColor = Xwt.Drawing.Colors.LightGray;
-			var artistZ = new Label ("Artist Z");
+			var artistZ = new Label (" Artist Z");
 			artistZ.BackgroundColor = Xwt.Drawing.Colors.White;
 
-			var titleX = new Label ("Title X");
+			var titleX = new Label (" Title X");
 			titleX.BackgroundColor = Xwt.Drawing.Colors.White;
-			var titleY = new Label ("Title Y");
+			var titleY = new Label (" Title Y");
 			titleY.BackgroundColor = Xwt.Drawing.Colors.LightGray;
-			var titleZ = new Label ("Title Z");
+			var titleZ = new Label (" Title Z");
 			titleZ.BackgroundColor = Xwt.Drawing.Colors.White;
 
 			var pgBarX = new ProgressBar ();
@@ -88,18 +88,30 @@ namespace Samples
 			pgBarZ.Indeterminate = true;
 
 
-			MenuButton mbA = new MenuButton ("Artist");
-			mbA.Margin.SetAll (-1);
-			table.Attach (mbA, 0, 0, AttachOptions.Fill, AttachOptions.Fill);
+			var fA = new Frame ();
+			fA.Content = new Label (" Artist");
+			table.Attach (fA, 0, 0);
 
-			Button mbT = new Button ("Title");
-			mbT.Margin.SetAll (-1);
-			table.Attach (mbT, 1, 0, AttachOptions.Fill, AttachOptions.Fill);
-			mbT.Surface.Reallocate ();
+			var fT = new Frame ();
+			fT.Content = new Label (" Title");
+			table.Attach (fT, 1, 0);
 
-			Button mbS = new Button ("Status");
-			mbS.Margin.SetAll (-1);
-			table.Attach (mbS, 2, 0, AttachOptions.Fill, AttachOptions.Fill);
+			var fS = new Frame ();
+			fS.Content = new Label (" Status");
+			table.Attach (fS, 2, 0);
+//
+//			MenuButton mbA = new MenuButton ("Artist");
+//			mbA.Margin.SetAll (-1);
+//			table.Attach (mbA, 0, 0, AttachOptions.Fill, AttachOptions.Fill);
+
+//			Button mbT = new Button ("Title");
+//			mbT.Margin.SetAll (-1);
+//			table.Attach (mbT, 1, 0, AttachOptions.Fill, AttachOptions.Fill);
+//			mbT.Surface.Reallocate ();
+//
+//			Button mbS = new Button ("Status");
+//			mbS.Margin.SetAll (-1);
+//			table.Attach (mbS, 2, 0, AttachOptions.Fill, AttachOptions.Fill);
 
 			table.Attach (artistX, 0, 1);
 			table.Attach (titleX, 1, 1);
