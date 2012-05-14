@@ -2,7 +2,7 @@
 // ProgressBarSample.cs
 //  
 // Author:
-//       Andres G. Aragoneses <knocte@gmail.com>
+//	   Andres G. Aragoneses <knocte@gmail.com>
 // 
 // Copyright (c) 2012 Andres G. Aragoneses
 // 
@@ -25,6 +25,7 @@
 // THE SOFTWARE.
 
 using System;
+using System.IO;
 using System.Timers;
 using Xwt;
 using Xwt.Drawing;
@@ -88,15 +89,20 @@ namespace Samples
 			pgBarZ.Indeterminate = true;
 
 
-			var fA = new Frame (FrameType.Custom);
+
+			var fA = CreateFrame ();
+			fA.BorderColor = Xwt.Drawing.Colors.Gray;
 			fA.Content = new Label (" Artist");
 			table.Attach (fA, 0, 0);
 
-			var fT = new Frame (FrameType.Custom);
+
+			var fT = CreateFrame ();
+			fA.BorderColor = Xwt.Drawing.Colors.Gray;
 			fT.Content = new Label (" Title");
 			table.Attach (fT, 1, 0);
 
-			var fS = new Frame (FrameType.Custom);
+			var fS = CreateFrame ();
+			fA.BorderColor = Xwt.Drawing.Colors.Gray;
 			fS.Content = new Label (" Status");
 			table.Attach (fS, 2, 0);
 //
@@ -146,6 +152,46 @@ namespace Samples
 				nextFraction = 0.0;
 			}
 			Application.Invoke ( () => determinateProgressBar.Fraction = nextFraction );
+		}
+
+		Frame CreateFrame() {
+			Frame frame = null;
+			if (RunningPlatform () == Platform.Linux)
+				frame = new Frame ();
+			else if (RunningPlatform () == Platform.Mac)
+				frame = new Frame (FrameType.Custom);
+			frame.BorderColor = Xwt.Drawing.Colors.Gray;
+			return frame;
+		}
+
+		public enum Platform
+		{
+			Windows,
+			Linux,
+			Mac
+		}
+
+		public static Platform RunningPlatform()
+		{
+			switch (Environment.OSVersion.Platform)
+			{
+				case PlatformID.Unix:
+					// Well, there are chances MacOSX is reported as Unix instead of MacOSX.
+					// Instead of platform check, we'll do a feature checks (Mac specific root folders)
+					if (Directory.Exists("/Applications")
+						& Directory.Exists("/System")
+						& Directory.Exists("/Users")
+						& Directory.Exists("/Volumes"))
+						return Platform.Mac;
+					else
+						return Platform.Linux;
+	
+				case PlatformID.MacOSX:
+					return Platform.Mac;
+	
+				default:
+					return Platform.Windows;
+			}
 		}
 	}
 }
