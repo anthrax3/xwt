@@ -44,15 +44,15 @@ namespace Samples
 
 		public ProgressBarSample ()
 		{
-			indeterminateProgressBar = new ProgressBar ();
-			PackStart (indeterminateProgressBar, BoxMode.FillAndExpand);
-			indeterminateProgressBar.Indeterminate = true;
+			//indeterminateProgressBar = new ProgressBar ();
+			//PackStart (indeterminateProgressBar, BoxMode.FillAndExpand);
+			//indeterminateProgressBar.Indeterminate = true;
 
-			timer.Elapsed += Increase;
-			determinateProgressBar = new ProgressBar ();
-			determinateProgressBar.Fraction = 0.0;
-			PackStart(determinateProgressBar, BoxMode.FillAndExpand);
-			timer.Start ();
+			//timer.Elapsed += Increase;
+			//determinateProgressBar = new ProgressBar ();
+			//determinateProgressBar.Fraction = 0.0;
+			//PackStart(determinateProgressBar, BoxMode.FillAndExpand);
+			//timer.Start ();
 
 			var treeView = new TreeView ();
 			TreeStore store = new TreeStore (artist, title, status);
@@ -90,17 +90,13 @@ namespace Samples
 
 
 
-			var fA = CreateFrame ();
-			fA.Content = new Label (" Artist");
+			var fA = CreateFrame (" Artist");
 			table.Attach (fA, 0, 0);
 
-
-			var fT = CreateFrame ();
-			fT.Content = new Label (" Title");
+			var fT = CreateFrame (" Title");
 			table.Attach (fT, 1, 0);
 
-			var fS = CreateFrame ();
-			fS.Content = new Label (" Status");
+			var fS = CreateFrame (" Status");
 			table.Attach (fS, 2, 0);
 //
 //			MenuButton mbA = new MenuButton ("Artist");
@@ -151,18 +147,24 @@ namespace Samples
 			Application.Invoke ( () => determinateProgressBar.Fraction = nextFraction );
 		}
 
-		Frame CreateFrame() {
-			Frame frame = null;
+		Widget CreateFrame(string text) {
+			Widget widget = null;
 			if (RunningPlatform () == Platform.Linux) {
-				frame = new Frame ();
-				frame.BorderColor = Xwt.Drawing.Colors.Gray;
+				widget = new Frame ();
+				((Frame)widget).BorderColor = Xwt.Drawing.Colors.Gray;
+				((Frame)widget).Content = new Label(text);
 			}
 			else if (RunningPlatform () == Platform.Mac) {
-				frame = new Frame (FrameType.Custom);
-				frame.BorderColor = Xwt.Drawing.Colors.LightGray;
+				widget = new Frame (FrameType.Custom);
+				((Frame)widget).BorderColor = Xwt.Drawing.Colors.LightGray;
+				((Frame)widget).Content = new Label(text);
+			}
+			else if (RunningPlatform() == Platform.Windows)
+			{
+				widget = new Button(text);
 			}
 			
-			return frame;
+			return widget;
 		}
 
 		public enum Platform
