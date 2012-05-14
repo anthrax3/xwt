@@ -91,18 +91,15 @@ namespace Samples
 
 
 			var fA = CreateFrame ();
-			fA.BorderColor = Xwt.Drawing.Colors.Gray;
 			fA.Content = new Label (" Artist");
 			table.Attach (fA, 0, 0);
 
 
 			var fT = CreateFrame ();
-			fA.BorderColor = Xwt.Drawing.Colors.Gray;
 			fT.Content = new Label (" Title");
 			table.Attach (fT, 1, 0);
 
 			var fS = CreateFrame ();
-			fA.BorderColor = Xwt.Drawing.Colors.Gray;
 			fS.Content = new Label (" Status");
 			table.Attach (fS, 2, 0);
 //
@@ -156,11 +153,15 @@ namespace Samples
 
 		Frame CreateFrame() {
 			Frame frame = null;
-			if (RunningPlatform () == Platform.Linux)
+			if (RunningPlatform () == Platform.Linux) {
 				frame = new Frame ();
-			else if (RunningPlatform () == Platform.Mac)
+				frame.BorderColor = Xwt.Drawing.Colors.Gray;
+			}
+			else if (RunningPlatform () == Platform.Mac) {
 				frame = new Frame (FrameType.Custom);
-			frame.BorderColor = Xwt.Drawing.Colors.Gray;
+				frame.BorderColor = Xwt.Drawing.Colors.LightGray;
+			}
+			
 			return frame;
 		}
 
