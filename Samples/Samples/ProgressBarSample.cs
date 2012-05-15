@@ -26,150 +26,11 @@
 
 using System;
 using System.IO;
-using System.Collections.Generic;
 using System.Timers;
 using Xwt;
-using Xwt.Drawing;
 
 namespace Samples
 {
-	// EPIC FAIL: Unfortunately, XWT's TreeView doesn't support adding widgets to a cell, so
-	//            we have come up with this temporary workaround, which works very well anyway
-	public class CustomTreeView : Table {
-
-		public CustomTreeView ()
-		{
-			columns = new ColumnCollection (this);
-		}
-
-		public class Column {
-			internal string Title { get; set; }
-
-			internal DataField Field { get; set; }
-		}
-
-		public class ColumnCollection : System.Collections.Generic.IEnumerable<Column> {
-
-			CustomTreeView parent;
-			internal ColumnCollection (CustomTreeView parent) {
-				this.parent = parent;
-			}
-
-			List<Column> columns = new List<Column> ();
-
-			public void Add (string title, DataField field)
-			{
-				columns.Add (new Column { Title = title, Field = field });
-			}
-
-			#region IEnumerable implementation
-			System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator ()
-			{
-				return columns.GetEnumerator ();
-			}
-			#endregion
-
-			#region IEnumerable implementation
-			IEnumerator<Column> IEnumerable<Column>.GetEnumerator ()
-			{
-				return columns.GetEnumerator ();
-			}
-			#endregion
-		}
-
-		ColumnCollection columns;
-		public ColumnCollection Columns {
-			get {
-				return columns;
-			}
-		}
-
-		TreeStore dataSource;
-		public TreeStore DataSource {
-			get {
-				return dataSource;
-			}
-			set {
-				if (dataSource != value) {
-					dataSource = value;
-
-					Build ();
-				}
-			}
-		}
-
-		private void Build () {
-			int left = 0;
-			foreach (Column column in columns) {
-				Attach (CreateHeader (column.Title), left++, 0);
-			}
-
-			var firstNode = dataSource.GetFirstNode ();
-			foreach (var column in columns) {
-				Console.WriteLine ("hea");
-				//firstNode.
-				//firstNode.GetValue (column.
-				//Attach (CreateHeader (column.Title), left++, 0);
-			}
-			//firstNode.GetValue (
-
-			this.DefaultRowSpacing = 0;
-			this.DefaultColumnSpacing = 0;
-		}
-
-		Widget CreateHeader (string text) {
-			Widget widget = null;
-			if (RunningPlatform () == Platform.Linux) {
-				widget = new Frame ();
-				((Frame)widget).BorderColor = Xwt.Drawing.Colors.Gray;
-				((Frame)widget).Content = new Label(text);
-			}
-			else if (RunningPlatform () == Platform.Mac) {
-				widget = new Frame (FrameType.Custom);
-				((Frame)widget).BorderColor = Xwt.Drawing.Colors.LightGray;
-				((Frame)widget).Content = new Label(text);
-			}
-			else if (RunningPlatform() == Platform.Windows)
-			{
-				widget = new Button(text);
-			}
-			
-			return widget;
-		}
-
-		public enum Platform
-		{
-			Windows,
-			Linux,
-			Mac
-		}
-
-		public static Platform RunningPlatform()
-		{
-			switch (Environment.OSVersion.Platform)
-			{
-				case PlatformID.Unix:
-					// Well, there are chances MacOSX is reported as Unix instead of MacOSX.
-					// Instead of platform check, we'll do a feature checks (Mac specific root folders)
-					if (Directory.Exists("/Applications")
-						& Directory.Exists("/System")
-						& Directory.Exists("/Users")
-						& Directory.Exists("/Volumes"))
-						return Platform.Mac;
-					else
-						return Platform.Linux;
-	
-				case PlatformID.MacOSX:
-					return Platform.Mac;
-	
-				default:
-					return Platform.Windows;
-			}
-		}
-
-		
-	}
-
 	public class ProgressBarSample : VBox
 	{
 		Timer timer = new Timer (100);
@@ -188,11 +49,11 @@ namespace Samples
 			PackStart(determinateProgressBar, BoxMode.FillAndExpand);
 			timer.Start();
 
-			DataField<string> artist = new DataField<string> ();
-			DataField<string> title = new DataField<string> ();
-			DataField<Widget> status = new DataField<Widget> ();
-			CustomTreeView view = new CustomTreeView ();
-			TreeStore store = new TreeStore (artist, title, status);
+			var artist = new DataField<string> ();
+			var title = new DataField<string> ();
+			var status = new DataField<Widget> ();
+			var view = new CustomTreeView ();
+			var store = new CustomTreeView.TreeStore(artist, title, status);
 		
 			view.Columns.Add ("Artist", artist);
 			view.Columns.Add ("Title", title);
@@ -211,54 +72,6 @@ namespace Samples
 			store.AddNode ().SetValue (artist, "Artist Z").SetValue (title, "Title Z").SetValue (status, pg);
 			view.DataSource = store;
 			PackStart (view);
-
-
-			var table = new Table ();
-			var artistX = new Label (" Artist X");
-			artistX.BackgroundColor = Xwt.Drawing.Colors.White;
-			var artistY = new Label (" Artist Y");
-			artistY.BackgroundColor = Xwt.Drawing.Colors.LightGray;
-			var artistZ = new Label (" Artist Z");
-			artistZ.BackgroundColor = Xwt.Drawing.Colors.White;
-
-			var titleX = new Label (" Title X");
-			titleX.BackgroundColor = Xwt.Drawing.Colors.White;
-			var titleY = new Label (" Title Y");
-			titleY.BackgroundColor = Xwt.Drawing.Colors.LightGray;
-			var titleZ = new Label (" Title Z");
-			titleZ.BackgroundColor = Xwt.Drawing.Colors.White;
-
-			var pgBarX = new ProgressBar ();
-			pgBarX.Indeterminate = true;
-			var pgBarY = new ProgressBar ();
-			pgBarY.Indeterminate = true;
-			var pgBarZ = new ProgressBar ();
-			pgBarZ.Indeterminate = true;
-
-			var fA = CreateFrame (" Artist");
-			table.Attach (fA, 0, 0);
-
-			var fT = CreateFrame (" Title");
-			table.Attach (fT, 1, 0);
-
-			var fS = CreateFrame (" Status");
-			table.Attach (fS, 2, 0);
-
-			table.Attach (artistX, 0, 1);
-			table.Attach (titleX, 1, 1);
-			table.Attach (pgBarX, 2, 1);
-
-			table.Attach (artistY, 0, 2);
-			table.Attach (titleY, 1, 2);
-			table.Attach (pgBarY, 2, 2);
-
-			table.Attach (artistZ, 0, 3);
-			table.Attach (titleZ, 1, 3);
-			table.Attach (pgBarZ, 2, 3);
-
-			table.DefaultRowSpacing = 0;
-			table.DefaultColumnSpacing = 0;
-			PackStart (table, BoxMode.Fill);
 		}
 
 		public void Increase (object sender, ElapsedEventArgs args)
@@ -271,56 +84,6 @@ namespace Samples
 				nextFraction = 0.0;
 			}
 			Application.Invoke ( () => determinateProgressBar.Fraction = nextFraction );
-		}
-
-		Widget CreateFrame(string text) {
-			Widget widget = null;
-			if (RunningPlatform () == Platform.Linux) {
-				widget = new Frame ();
-				((Frame)widget).BorderColor = Xwt.Drawing.Colors.Gray;
-				((Frame)widget).Content = new Label(text);
-			}
-			else if (RunningPlatform () == Platform.Mac) {
-				widget = new Frame (FrameType.Custom);
-				((Frame)widget).BorderColor = Xwt.Drawing.Colors.LightGray;
-				((Frame)widget).Content = new Label(text);
-			}
-			else if (RunningPlatform() == Platform.Windows)
-			{
-				widget = new Button(text);
-			}
-			
-			return widget;
-		}
-
-		public enum Platform
-		{
-			Windows,
-			Linux,
-			Mac
-		}
-
-		public static Platform RunningPlatform()
-		{
-			switch (Environment.OSVersion.Platform)
-			{
-				case PlatformID.Unix:
-					// Well, there are chances MacOSX is reported as Unix instead of MacOSX.
-					// Instead of platform check, we'll do a feature checks (Mac specific root folders)
-					if (Directory.Exists("/Applications")
-						& Directory.Exists("/System")
-						& Directory.Exists("/Users")
-						& Directory.Exists("/Volumes"))
-						return Platform.Mac;
-					else
-						return Platform.Linux;
-	
-				case PlatformID.MacOSX:
-					return Platform.Mac;
-	
-				default:
-					return Platform.Windows;
-			}
 		}
 	}
 }
